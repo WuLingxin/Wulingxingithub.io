@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>便民服务小事件收集</title>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        height: 100%;
+        width: 100%;
+      }
+	.div-td{
+		width:400px} 
+	.div-td table td{ 
+		background:#CCC; color:#000; 
+		line-height:40px} 
+		
+		
+		
+		
+    </style>
+     <style type="text/css">
+		 .box0{
+		  width: 100%;
+		  height: 7%;
+		  display: inline-block;
+		 
+		 }
+		 .box1{
+			 width: 100%;
+			 height:40%;
+			
+			display: inline-block; 
+			
+		 }
+		 .box3{
+			 width: 65%;
+			 height: 100%;
+			 margin-left: 0.9375rem;
+			 margin-right: 0.9375rem;
+			 margin-bottom: 0.9375rem;
+			 display: inline-block;
+			 margin-top: 30px;
+		 }
+		 .box4{
+			width: 10%;
+			height: 100%;
+			margin-left: 0.9375rem;
+			margin-right: 0.9375rem;
+			margin-bottom: 0.9375rem;
+			margin-top: 0.9375rem;
+			display: inline-block;
+			
+			
+		 }
+		 .box5{
+		 			 width: 100%;
+		 			 height:50%;
+		 			 margin-top: 0.9375rem;
+                     
+		 			display: inline-block; 
+		 }
+		 .box6{
+			 width: 15%;
+			 height: 100%;
+			 margin-left: 0.9375rem;
+			 margin-right: 0.9375rem;
+			 margin-bottom: 0.9375rem;
+			 display: inline-block;
+		 }
+		 .box7{
+			 width: 100%;
+			 height: 90%;
+		 }
+		 .box8{
+			 background: pink;
+		 }
+		 .box9{
+			 margin-left: 38%;
+             font-family: "微软雅黑";
+			 font-size: 1.875rem;
+			 margin-top: 1.125rem;
+		 }
+		 
+		 .box10{
+			 width: 100%;
+			 height:10%;
+			 display: inline-block; 
+			 margin-left: 20%;
+			 margin-top: 1.875rem;
+		 }
+		 .box11{
+		      width: 100%;
+			  height: 48%;
+              margin-top: 15px;
+			  
+		 }
+		
+		 
+		 .clock {
+		   width: 200px;
+		   height: 200px;
+		   background: -webkit-radial-gradient(#3b3b3b, #000);
+		   background: radial-gradient(#2E3F50, #0E1B29);
+		   box-shadow: inset 0px 0px 30px #131313, 0px 2px 18px rgba(0,0,0,0.5);
+		   border: 6px solid #172839;
+		   border-radius: 106px;
+		   margin:auto;
+		   position: relative;
+		   top: 0; bottom: 0; left: 0; right: 0;
+		 }
+		 .hour-hand {
+		   width: 4px;
+		   height: 55px;
+		   background: #fff;
+		   box-shadow: 0px 0px 7px #000;
+		   position: absolute;
+		   top: 45px;
+		   left: 98px;
+		 }
+		 .minute-hand {
+		   width: 4px;
+		   height: 80px;
+		   background: #fff;
+		   box-shadow: 0px 0px 4px #000;
+		   position: absolute;
+		   top: 20px;
+		   left: 98px;
+		 }
+		 .second-hand {
+		   width: 2px;
+		   height: 80px;
+		   background: #bbb;
+		   box-shadow: 0px 0px 7px #000;
+		   position: absolute;
+		   top: 20px;
+		   left: 99px;
+		 }
+		 .pin {
+		   width: 10px;
+		   height: 10px;
+		   background: #222;
+		   border-radius: 10px;
+		   margin: auto;
+		   position: absolute;
+		   top: 0; bottom: 0; left: 0; right: 0;
+		 }
+		 .hour-hand,
+		 .minute-hand,
+		 .second-hand {
+		   -webkit-transform-origin: 50% 100%;
+		   -moz-transform-origin: 50% 100%;
+		   -o-transform-origin: 50% 100%;
+		   -ms-transform-origin: 50% 100%;
+		   transform-origin: 50% 100%;
+		 }
+		 .circle{
+		   width:20px;
+		   height:20px;
+		   line-height:20px;
+		   text-align:center;
+		   color:#fff;
+		   position: absolute;
+		 }
+		
+
+		       
+	 </style>
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.15/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.15/"></script>
+
+    <script>
+    	require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/FeatureLayer",
+        "esri/layers/TileLayer",
+        "esri/widgets/Legend",
+        "esri/widgets/ScaleBar",
+		"esri/widgets/Compass",
+		"esri/widgets/Editor",
+		"esri/widgets/NavigationToggle"
+      ], function (Map, MapView, FeatureLayer, TileLayer, Legend, ScaleBar,Compass,Editor,NavigationToggle) {
+      	var flayer = new FeatureLayer({
+      		url:
+            "https://www.arcgisonline.cn/server/rest/services/Hosted/小Incidents/FeatureServer"
+      	});
+      	
+
+      	var map1 = new Map({
+      		basemap: "topo",
+      		layers: [flayer]
+      	});
+
+      	var view1 = new MapView({
+      		container: "viewDiv",
+      		map: map1,
+      		zoom: 8,
+      		center: [119.6, 32] // longitude, latitude
+      	});
+
+      	var legend1 = new Legend({
+      		view: view1,
+      		layerInfos: [
+            {
+            	layer: flayer,
+            	
+            }
+          ]
+      	});
+
+      	view1.ui.add(legend1, "bottom-right");
+
+      	var scaleBar1 = new ScaleBar({
+      		view: view1,
+      		style: "ruler",
+      		unit: "non-metric"
+      	});
+
+      	view1.ui.add(scaleBar1, {
+      		position: "bottom-left"
+      	});
+
+      	var coordsWidget = document.createElement("div");
+      	coordsWidget.id = "coordsWidget";
+      	coordsWidget.className = "esri-widget esri-component";
+      	coordsWidget.style.padding = "7px 15px 5px";
+
+      	view1.ui.add(coordsWidget, "bottom-right");
+      	function showCoordinates(pt) {
+      		var coords =
+            "Lat/Lon " +
+            pt.latitude.toFixed(3) +
+            " " +
+            pt.longitude.toFixed(3) +
+            " | Scale 1:" +
+            Math.round(view1.scale * 1) / 1 +
+            " | Zoom " +
+            view1.zoom;
+      		coordsWidget.innerHTML = coords;
+      	}
+      	view1.watch("stationary", function (isStationary) {
+      		showCoordinates(view1.center);
+      	});
+
+      	view1.on("pointer-move", function (evt) {
+      		showCoordinates(view1.toMap({ x: evt.x, y: evt.y }));
+      	});
+		var compass = new Compass({
+		   view: view1
+		 });
+		 
+		view1.ui.add(compass, "top-right");
+		
+		
+		var editor = new Editor({
+		  view: view1
+		});
+		
+		view1.ui.add(editor, "top-left");
+		var navigationToggle = new NavigationToggle({
+		  view: view1
+		});
+		
+		// and adds it to the top right of the view
+		view1.ui.add(navigationToggle, "top-right");
+		
+		
+      });
+    </script>
+  </head>
+
+  <body  class="box8">
+	 <div class="box0">
+		 <div id="i1" class="box9">便民服务小事件收集&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+		     <script>
+		         function func(){
+		             let tag = document.getElementById('i1');
+		             let content = tag.innerText;
+		             let f = content.charAt(0);
+		             let l = content.substring(1, content.length);
+		             let new_content = l + f;
+		             tag.innerText = new_content
+		         }
+		         setInterval('func()',1000)
+		     </script>
+		 					
+	 </div>
+	  
+	  
+	  
+	  
+	  <div class="box7">
+		
+		   <div class="box4">
+			         <div class="box11">
+		 	             	<table border="1px">
+				               	 <tr height="40px">
+					             	<th align="center" width="120px">服务类型</th>
+					 	            <th align="center" width="120px">事件个数</th>
+					            </tr>
+					             <tr height="40px">
+					 	             <th align="center">水表故障</th>
+					 	              <th align="center">0</th>
+					             </tr>
+					              <tr height="40px">
+					 	              <th align="center">管道堵塞</th>
+					 	              <th align="center">3</th>
+					               </tr>
+					               <tr height="40px">
+					 	                  <th align="center">门锁破损</th>
+					 	                  <th align="center">0</th>
+					                </tr>
+					             <tr height="40px">
+					 	                <th align="center">家电维修</th>
+					 	                 <th align="center">0</th>
+					              </tr>
+					             <tr height="40px">
+					                 	<th align="center">房屋漏水</th>
+					                  	<th align="center">3</th>
+					              </tr>
+					              <tr height="40px">
+						               <th align="center">其他</th>
+						               <th align="center">0</th>
+					               </tr>
+					 
+				            </table>
+		            </div>
+			
+		
+		 </div>
+		 
+		 <div class="box3">
+		 		 <div id="viewDiv"></div>
+		 </div>
+		 
+		 <div class="box6">
+		 	<div class="box1">
+				<div class="clock">
+				  <div class="minute-hand"></div>
+				  <div class="hour-hand"></div>
+				  <div class="second-hand"></div>
+				  <div class="pin"></div>
+				  <div class="circle">6</div>
+				  <div class="circle">5</div>
+				  <div class="circle">4</div>
+				  <div class="circle">3</div>
+				  <div class="circle">2</div>
+				  <div class="circle">1</div>
+				  <div class="circle">12</div>
+				  <div class="circle">11</div>
+				  <div class="circle">10</div>
+				  <div class="circle">9</div>
+				  <div class="circle">8</div>
+				  <div class="circle">7</div>
+				</div>
+				   <div class="time"></div>
+				   <script type="text/javascript">
+				     window.onload=function(){
+				       setInterval(function(){
+				         var dt = new Date();
+				         var sec_deg = dt.getSeconds() * (360/60);
+				         var min_deg = dt.getMinutes() * (360/60);
+				         var hr_deg = dt.getHours() * (360/12) + dt.getMinutes() * (360/60/12);
+				         document.querySelector(".clock .second-hand").style.cssText='-webkit-transform:rotate(' + sec_deg + 'deg)','-moz-transform:rotate(' + sec_deg + 'deg)', '-o-transform:rotate(' + sec_deg + 'deg)', '-ms-transform:rotate(' + sec_deg + 'deg)', 'transform:rotate(' + sec_deg + 'deg)';
+				         document.querySelector('.clock .minute-hand').style.cssText='-webkit-transform:rotate(' + min_deg + 'deg)', '-moz-transform:rotate(' + min_deg + 'deg)', '-o-transform:rotate(' + min_deg + 'deg)', '-ms-transform:rotate(' + min_deg + 'deg)', 'transform:rotate(' + min_deg + 'deg)';
+				         document.querySelector('.clock .hour-hand').style.cssText='-webkit-transform:rotate(' + hr_deg + 'deg)', '-moz-transform:rotate(' + hr_deg + 'deg)', '-o-transform:rotate(' + hr_deg + 'deg)', '-ms-transform:rotate(' + hr_deg + 'deg)', 'transform:rotate(' + hr_deg + 'deg)';
+				        }, 1000);
+				       var dx=90,
+				         dy=90,
+				         s=87,//半径
+				         x=Math.sin(0),
+				         y=Math.cos(0),
+				         dig=2*Math.PI/12;
+				       var circle=document.querySelectorAll(".circle");
+				       for(var i=0;i<12;i++){
+				         var x=Math.sin(i*dig);
+				         var y=Math.cos(i*dig);
+				         var topValue=Number(dy+y*s),
+				           leftValue=Number(dx+x*s);
+				         circle[i].style.top=topValue+"px";
+				         circle[i].style.left=leftValue+"px";
+				       }
+				     }
+				   </script>
+				   
+				    <div class="box10">
+				                <span>
+				                      <script type="text/javascript">
+				                        var date = new Date();
+				                        document.write("" + date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日" + " 星期" + "日一二三四五六".charAt(date.getDay()));
+				                      </script>
+				                </span>
+				            </div>
+			</div>
+		 	<div class="box5">  
+</div> 
+		 </div>
+	 </div>
+	 
+
+  </body>
+</html>
